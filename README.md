@@ -37,5 +37,3 @@ or
 # 也可以直接配置sysctl
 sudo sysctl kernel.unprivileged_userns_clone=1
 ```
-
-设置angualr 编译选项 optimization:false 才可以显示数学公式
