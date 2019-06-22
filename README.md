@@ -34,6 +34,5 @@ sudo chmod 4755 your_path/node_modules/electron/dist/chrome-sandbox
 or
 
 ```sh
-# 也可以直接配置sysctl
 sudo sysctl kernel.unprivileged_userns_clone=1
 ```
