@@ -18,7 +18,7 @@ Then select your file,file like [this](https://github.com/ZTFtrue/Math-study/blo
 
 ## Troubled
 
-on linux
+The following problems may occur on some Linux devices.
 
 ```sh
 [12419:0602/204432.273114:FATAL:setuid_sandbox_host.cc(157)] The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I'm aborting now. You need to make sure that ./node_modules/electron/dist/chrome-sandbox is owned by root and has mode 4755.
