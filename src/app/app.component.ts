@@ -43,12 +43,12 @@ export class AppComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.useBrowser = JSON.parse(localStorage.getItem('useBrowser'));
     if (this.useBrowser) {
-        this.forbidCopy = true;
+      this.forbidCopy = true;
     } else {
-        this.forbidCopy = false;
+      this.forbidCopy = false;
     }
   }
-  changeuseBrowser() {
+  changeUseBrowser() {
     localStorage.setItem('useBrowser', JSON.stringify(this.useBrowser));
     if (this.useBrowser) {
       if (this.svg) {
@@ -98,6 +98,9 @@ export class AppComponent implements AfterViewInit, OnInit {
   uploadFileClick() {
     this.inputfile.nativeElement.click();
   }
+  /*
+  * 读取文件内容
+  */
   processFiles(file: any): void {
     file = file.target.files[0];
     if (file) {
@@ -115,11 +118,17 @@ export class AppComponent implements AfterViewInit, OnInit {
       });
     }
   }
-  convertAndDraw() {
-    this.convertInput();
+  /*
+  * 转换并绘制
+  */
+  convertAndDraw(): void {
+    this.convertText();
     this.drawSvg();
   }
-  convertInput() {
+  /*
+  * 将文本内容转换为易于使用的json
+  */
+  convertText(): void {
     if (!this.inputContent) {
       return;
     }
@@ -183,6 +192,9 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
     this.jsonTree = this.jsonTree.children[0];
   }
+  /*
+  * 获取svg配置
+  */
   compileConfig(stringConfigs: string[]) {
     stringConfigs = stringConfigs.filter((item) => {
       return item.charAt(0) !== '#';
@@ -327,18 +339,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         });
       }
       const lineHigth = -5;
-      // if (words[0].indexOf('$$') >= 0) {
-      //   const temp = vm.renderer.createElement('div');
-      //   temp.innerHTML = words[0];
-      //   MathJax.Hub.Queue(['setRenderer', MathJax.Hub, 'SVG'], ['Typeset', MathJax.Hub, temp], () => {
-      //     d3.select(this).append(() => {
-      //       return temp;
-      //     });
-      //     // .attr('x', 10).attr('y', lineHigth);
-      //   });
-      // } else {
       tspan = text.append('tspan').attr('x', 10).attr('y', lineHigth).text(words[0]);
-      // }
     });
   }
   openDialog(content: string): void {
@@ -352,7 +353,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     dialogRef.afterClosed().subscribe(result => {
     });
   }
-  mouseWheelUp(event) {// 放大
+  mouseWheelUp(event: any) {// 放大
     if (!this.svg) {
       return;
     }
@@ -364,7 +365,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
     this.svg.attr('viewBox', this.viewBoxStartX + ' ' + this.viewBoxStartY + ' ' + this.viewBoxEndX + ' ' + this.viewBoxEndY);
   }
-  mouseWheelDown(event) {// 缩小
+  mouseWheelDown(event: any) {// 缩小
     if (!this.svg) {
       return;
     }
@@ -372,7 +373,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.viewBoxEndY = this.viewBoxEndY + this.scaleSpeed;
     this.svg.attr('viewBox', this.viewBoxStartX + ' ' + this.viewBoxStartY + ' ' + this.viewBoxEndX + ' ' + this.viewBoxEndY);
   }
-  mouseMove(event) {
+  mouseMove(event: any): void {
     // 计算鼠标移动速度
     if (!this.svg) {
       return;
@@ -398,11 +399,11 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.lastClientX = event.clientX;
     this.lastClientY = event.clientY;
   }
-  mouseMoveEnd(event) {
+  mouseMoveEnd(event: any): void {
     this.lastClientX = -1;
     this.lastClientY = -1;
   }
-  saveSvg() {
+  saveSvg(): void {
     this.resetSvg();
     const html = d3.select('svg')
       .attr('title', 'math')
