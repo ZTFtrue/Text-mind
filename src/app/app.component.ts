@@ -137,58 +137,45 @@ export class AppComponent implements AfterViewInit, OnInit {
     // 解析配置
     this.compileConfig(contentArrary[0].split('\n'));
     const stringArrary = contentArrary[1].split('\n');
-    const nodes = [0];
     if (stringArrary[0] === '') {
       stringArrary.splice(0, 1);
     }
-    let lastIndex = 0;
     for (let s of stringArrary) {
       if (!s) {
         continue;
       }
-      if (s.charAt(0) === '#') {
-        continue;
-      }
       let i = 0;
       for (; i < s.length; i = i + 2) {// TODO 硬编码
-        if (s.charAt(i) === ' ') {
-
-        } else {
+        if (s.charAt(i) !== ' ') {
           break;
         }
       }
       s = s.substring(i, s.length);
-      s = s.replace('  ', '\n');
-      const spaceIndex = i / 2;  // 表示缩进
-      let jsonchildren = this.jsonTree;
-      if (lastIndex < i) { // 子
-        if (!isNaN(nodes[spaceIndex])) {
-          nodes[spaceIndex] = nodes[spaceIndex] + 1;
-        } else {
-          nodes[spaceIndex] = 0;
-        }
-      } else if (lastIndex > i) { // 父
-        nodes[spaceIndex] = nodes[spaceIndex] + 1;
-        nodes[spaceIndex + 1] = -1;
-      } else if (lastIndex !== 0 && lastIndex === i) {
-        nodes[spaceIndex] = nodes[spaceIndex] + 1;
+      if (s.charAt(0) === '#') {
+        continue;
       }
+      s = s.replace('  ', '\n');
+      let jsonchildren = this.jsonTree;
       if (s.charAt(0) === '@') {
-        for (let j = 0; j < spaceIndex; j++) {
-          jsonchildren = jsonchildren.children[nodes[j]];
-          if (j === spaceIndex - 1) {
-            nodes[spaceIndex] = nodes[spaceIndex] - 1;
+        for (; ;) {
+          if (jsonchildren.children.length > 0) {
+            jsonchildren = jsonchildren.children[jsonchildren.children.length - 1];
+          } else {
             jsonchildren.name = jsonchildren.name + '\n' + s.substring(1, s.length);
             break;
           }
         }
       } else {
+        const spaceIndex = i / 2;  // 表示缩进
         for (let j = 0; j < spaceIndex; j++) {
-          jsonchildren = jsonchildren.children[nodes[j]];
+          if (jsonchildren.children.length > 0) {
+            jsonchildren = jsonchildren.children[jsonchildren.children.length - 1];
+          } else {
+            break;
+          }
         }
         jsonchildren.children.push({ name: s, children: [] });
       }
-      lastIndex = i;
     }
     this.jsonTree = this.jsonTree.children[0];
   }
