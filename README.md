@@ -13,6 +13,10 @@ npm run start
 
 Then select your file,file like [this](https://github.com/ZTFtrue/Math-study/blob/master/math.gd)
 
+The file is text file by utf-8 encoded.Distinguish comments, configurations, and body text with "###". In front of "###" is the comment and configuration, followed by the body. Currently supported configurations include indented spaces, svg height and width, respectively "svg-height, svg-width, tab-index".
+
+Each action is a node, the content after the double space is not displayed on the node, and the double space indicates the line break. If there is an "@" at the beginning of the line, it means that the line follows the previous line and wraps.
+
 ![eg](./img/img1.jpg)
 ![eg](./img/img2.jpg)
 

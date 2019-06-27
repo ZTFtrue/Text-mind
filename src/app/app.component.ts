@@ -32,6 +32,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   lastClientY = -1;
   forbidCopy = false;
   useBrowser = false;
+  tabIndex = 2;
   @ViewChild('inputfile', { static: true }) inputfile: ElementRef;
   @ViewChild('svgContent', { static: true }) svgContent: ElementRef;
 
@@ -145,13 +146,13 @@ export class AppComponent implements AfterViewInit, OnInit {
         continue;
       }
       let i = 0;
-      for (; i < s.length; i = i + 2) {// TODO 硬编码
+      for (; i < s.length; i = i + this.tabIndex) {// TODO 硬编码，计算缩进
         if (s.charAt(i) !== ' ') {
           break;
         }
       }
       s = s.substring(i, s.length);
-      if (s.charAt(0) === '#') {
+      if (s.charAt(0) === '#') {// 如果是注释就不做处理
         continue;
       }
       s = s.replace('  ', '\n');
@@ -166,7 +167,7 @@ export class AppComponent implements AfterViewInit, OnInit {
           }
         }
       } else {
-        const spaceIndex = i / 2;  // 表示缩进
+        const spaceIndex = i / this.tabIndex;  // 表示缩进
         for (let j = 0; j < spaceIndex; j++) {
           if (jsonchildren.children.length > 0) {
             jsonchildren = jsonchildren.children[jsonchildren.children.length - 1];
@@ -179,6 +180,8 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
     this.jsonTree = this.jsonTree.children[0];
   }
+
+
   /*
   * 获取svg配置
   */
@@ -193,6 +196,8 @@ export class AppComponent implements AfterViewInit, OnInit {
       } else if (config.indexOf('svg-width') >= 0) {
         this.svgWidth = parseFloat(config.split(':')[1]);
         this.viewBoxEndX = this.svgWidth;
+      } else if (config.indexOf('tab-index') >= 0) {
+        this.tabIndex = parseFloat(config.split(':')[1]);
       }
     }
   }
