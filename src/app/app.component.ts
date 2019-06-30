@@ -17,10 +17,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   // content: string;
   inputContent = '';
   jsonTree = { name: '', children: [] };
-  nodeWidth = 180;
-  nodeHeight = 280;
-  svgWidth = 1000;
-  svgHeight = 10000;
+
   svg = null;
   viewBoxStartX = 0;
   viewBoxStartY = 0;
@@ -32,11 +29,14 @@ export class AppComponent implements AfterViewInit, OnInit {
   lastClientY = -1;
   forbidCopy = false;
   useBrowser = false;
-  tabIndex = 2;
+
+  svgConfig: SvgConfig;
   @ViewChild('inputfile', { static: true }) inputfile: ElementRef;
   @ViewChild('svgContent', { static: true }) svgContent: ElementRef;
 
   constructor(public dialog: MatDialog, private renderer: Renderer2, private el: ElementRef) {
+    // svgWidth: number, svgHeight: number, tabIndex: number, lineColor: string, textColor: string
+    this.svgConfig = new SvgConfig(1000, 1000, 2, '#0781FF', 'black');
   }
   relaodFile() {
     this.read();
@@ -54,9 +54,9 @@ export class AppComponent implements AfterViewInit, OnInit {
     if (this.useBrowser) {
       if (this.svg) {
         this.forbidCopy = true;
-        this.svg.attr('width', this.svgWidth);
-        this.svg.attr('height', this.svgHeight);
-        this.svg.attr('viewBox', '0 0 ' + this.svgWidth + ' ' + this.svgHeight);
+        this.svg.attr('width', this.svgConfig.svgWidth);
+        this.svg.attr('height', this.svgConfig.svgHeight);
+        this.svg.attr('viewBox', '0 0 ' + this.svgConfig.svgWidth + ' ' + this.svgConfig.svgHeight);
       }
     } else {
       if (this.svg) {
@@ -146,7 +146,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         continue;
       }
       let i = 0;
-      for (; i < s.length; i = i + this.tabIndex) {// TODO 硬编码，计算缩进
+      for (; i < s.length; i = i + this.svgConfig.tabIndex) {
         if (s.charAt(i) !== ' ') {
           break;
         }
@@ -167,7 +167,7 @@ export class AppComponent implements AfterViewInit, OnInit {
           }
         }
       } else {
-        const spaceIndex = i / this.tabIndex;  // 表示缩进
+        const spaceIndex = i / this.svgConfig.tabIndex;  // 表示缩进
         for (let j = 0; j < spaceIndex; j++) {
           if (jsonchildren.children.length > 0) {
             jsonchildren = jsonchildren.children[jsonchildren.children.length - 1];
@@ -191,15 +191,19 @@ export class AppComponent implements AfterViewInit, OnInit {
     });
     for (const config of stringConfigs) {
       if (config.indexOf('svg-height') >= 0) {
-        this.svgHeight = parseFloat(config.split(':')[1]);
-        this.viewBoxEndY = this.svgHeight;
+        this.svgConfig.svgHeight = parseFloat(config.split(':')[1]);
       } else if (config.indexOf('svg-width') >= 0) {
-        this.svgWidth = parseFloat(config.split(':')[1]);
-        this.viewBoxEndX = this.svgWidth;
+        this.svgConfig.svgWidth = parseFloat(config.split(':')[1]);
       } else if (config.indexOf('tab-index') >= 0) {
-        this.tabIndex = parseFloat(config.split(':')[1]);
+        this.svgConfig.tabIndex = parseFloat(config.split(':')[1]);
+      } else if (config.indexOf('line-color') >= 0) {
+        this.svgConfig.lineColor = config.split(':')[1];
+      } else if (config.indexOf('text-color') >= 0) {
+        this.svgConfig.textColor = config.split(':')[1];
       }
     }
+    this.viewBoxEndY = this.svgConfig.svgHeight;
+    this.viewBoxEndX = this.svgConfig.svgWidth;
   }
   drawSvg() {
     const content = d3.select('#content');
@@ -214,13 +218,13 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.svg.append('rect')
       .attr('x', 0)
       .attr('y', 0)
-      .attr('width', this.svgWidth)
-      .attr('height', this.svgHeight)
+      .attr('width', this.svgConfig.svgWidth)
+      .attr('height', this.svgConfig.svgHeight)
       .attr('fill', 'white');
     this.svg.attr('fill', 'white');
     if (this.useBrowser) {
-      this.svg.attr('width', this.svgWidth);
-      this.svg.attr('height', this.svgHeight);
+      this.svg.attr('width', this.svgConfig.svgWidth);
+      this.svg.attr('height', this.svgConfig.svgHeight);
     } else {
       this.svg.attr('width', this.svgContent.nativeElement.offsetWidth);
       this.svg.attr('height', this.svgContent.nativeElement.offsetHeight);
@@ -234,7 +238,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       });
     // 创建一个树状图
     const tree = d3.tree()
-      .size([this.svgHeight - 200, this.svgWidth - 400])
+      .size([this.svgConfig.svgHeight - 200, this.svgConfig.svgWidth - 400])
       // 节点距离
       .separation((a, b) => {
         return (a.parent === b.parent ? 1 : 2) / a.depth;
@@ -266,7 +270,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         return bézierCurveGenerator({ source: start, target: end });
       })
       .attr('fill', 'none')
-      .attr('stroke', 'yellow')
+      .attr('stroke', '#0781FF')
       .attr('stroke-width', 1);
 
     // 绘制节点和文字
@@ -308,8 +312,8 @@ export class AppComponent implements AfterViewInit, OnInit {
     if (this.useBrowser) {
       return;
     }
-    this.viewBoxEndY = this.svgHeight;
-    this.viewBoxEndX = this.svgWidth;
+    this.viewBoxEndY = this.svgConfig.svgHeight;
+    this.viewBoxEndX = this.svgConfig.svgWidth;
     this.lastClientX = -1;
     this.lastClientY = -1;
     this.svg.attr('width', this.svgContent.nativeElement.offsetWidth);
