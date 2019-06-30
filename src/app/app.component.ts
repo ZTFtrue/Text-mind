@@ -327,32 +327,33 @@ export class AppComponent implements AfterViewInit, OnInit {
     // tslint:disable-next-line: space-before-function-paren
     texts.each(function () {
       const text = d3.select(this);
-
       const words = text.text().split('\n');
       let tspan = text.text(null);
-      if (words.length > 1) {
-        text.on('click', (event) => {
-          vm.openDialog(event.data.name);
-        });
-      }
       const paddingLeft = 8; // 圆圈的直径
-
       const lineHigth = -5;
       tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(words[0]);
       const bbox = text.node().getBBox();
       const padding = 4;
       // tslint:disable-next-line: space-before-function-paren
       const g = text.select(function () { return this.parentNode; });
-      g.append('rect')
+      const rect = g.append('rect')
         .attr('x', bbox.x - paddingLeft)
         .attr('y', bbox.y - padding)
         .attr('width', bbox.width + (paddingLeft * 2))
         .attr('height', bbox.height + (padding * 2))
-        .style('fill', 'white')
-        .style('stroke', vm.svgConfig.lineColor)
-        .lower();
+        .style('fill', 'white').lower();
+      if (words.length > 1) {
+        g.attr('class', 'text-node');
+        g.on('click', (event) => {
+          vm.openDialog(event.data.name);
+        });
+        rect.style('stroke', vm.svgConfig.lineColor + '')
+      } else {
+        rect.style('stroke', vm.svgConfig.lineColor)
+      }
     });
   }
+
   openDialog(content: string): void {
     const dialogRef = this.dialog.open(DialogDetailsComponent, {
       // width: '250px',
