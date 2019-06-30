@@ -347,7 +347,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         g.on('click', (event) => {
           vm.openDialog(event.data.name);
         });
-        rect.style('stroke', vm.svgConfig.lineColor + '');
+        rect.style('stroke', vm.svgConfig.lineColor + '66');
       } else {
         rect.style('stroke', vm.svgConfig.lineColor);
       }
