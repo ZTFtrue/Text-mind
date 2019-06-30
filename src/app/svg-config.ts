@@ -1,4 +1,4 @@
-class SvgConfig {
+export class SvgConfig {
   svgWidth: number;
   svgHeight: number;
   tabIndex: number;

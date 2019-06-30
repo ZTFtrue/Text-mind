@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import { DialogDetailsComponent } from './dialog/dialog.component';
 import { app } from 'electron';
 import * as fs from 'fs';
+import { SvgConfig } from './svg-config';
 declare var MathJax: any;
 
 @Component({
