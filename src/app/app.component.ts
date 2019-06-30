@@ -216,6 +216,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       d3.select('svg').remove();
       this.svg = content.append('svg');
     }
+    // 添加背景
     this.svg.append('rect')
       .attr('x', 0)
       .attr('y', 0)
@@ -330,13 +331,26 @@ export class AppComponent implements AfterViewInit, OnInit {
       const words = text.text().split('\n');
       let tspan = text.text(null);
       if (words.length > 1) {
-        text.attr('class', 'text-node');
         text.on('click', (event) => {
           vm.openDialog(event.data.name);
         });
       }
+      const paddingLeft = 8; // 圆圈的直径
+
       const lineHigth = -5;
-      tspan = text.append('tspan').attr('x', 10).attr('y', lineHigth).text(words[0]);
+      tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(words[0]);
+      const bbox = text.node().getBBox();
+      const padding = 4;
+      // tslint:disable-next-line: space-before-function-paren
+      const g = text.select(function () { return this.parentNode; });
+      g.append('rect')
+        .attr('x', bbox.x - paddingLeft)
+        .attr('y', bbox.y - padding)
+        .attr('width', bbox.width + (paddingLeft * 2))
+        .attr('height', bbox.height + (padding * 2))
+        .style('fill', 'white')
+        .style('stroke', vm.svgConfig.lineColor)
+        .lower();
     });
   }
   openDialog(content: string): void {
