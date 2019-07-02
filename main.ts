@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, NativeImage } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 let win: BrowserWindow;
@@ -31,8 +31,9 @@ function createWindow() {
     });
     win.loadURL('http://localhost:4200');
   } else {
+    // win.setIcon(NativeImage.createFromPath(path.join(__dirname, '/text-mind/assets/favicon.png')));
     win.loadURL(url.format({
-      pathname: path.join(__dirname, 'gd-app/index.html'),
+      pathname: path.join(__dirname, 'text-mind/index.html'),
       protocol: 'file:',
       slashes: true
     }));
