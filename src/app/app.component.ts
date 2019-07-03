@@ -327,8 +327,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     // tslint:disable-next-line: space-before-function-paren
     texts.each(function () {
       const text = d3.select(this);
-      const g = text.select(function () { return this.parentNode; });
-
+      const g = text.select(function() { return this.parentNode; });
       const words = text.text().split('\n');
       let word = words[0];
       let tspan = text.text(null);
@@ -345,7 +344,7 @@ export class AppComponent implements AfterViewInit, OnInit {
             word = word.substring(word.indexOf('$') + 2, word.length);
           } else {
             math = word.substring(0, word.indexOf('$'));
-            word = word.substring(word.indexOf('$') + 1, word.length)
+            word = word.substring(word.indexOf('$') + 1, word.length);
           }
           let sub = false;
           for (const char of math) {
@@ -369,7 +368,6 @@ export class AppComponent implements AfterViewInit, OnInit {
       // tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(word);
       const bbox = g.node().getBBox();
       const padding = 4;
-      // tslint:disable-next-line: space-before-function-paren
       const rect = g.append('rect')
         .attr('x', bbox.x + padding)
         .attr('y', bbox.y - padding)
