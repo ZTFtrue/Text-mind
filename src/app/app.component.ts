@@ -327,47 +327,22 @@ export class AppComponent implements AfterViewInit, OnInit {
     // tslint:disable-next-line: space-before-function-paren
     texts.each(function () {
       const text = d3.select(this);
-      const g = text.select(function() { return this.parentNode; });
+      // tslint:disable-next-line: space-before-function-paren
+      const g = text.select(function () { return this.parentNode; });
       const words = text.text().split('\n');
-      let word = words[0];
+      const word = words[0];
       let tspan = text.text(null);
       const paddingLeft = 8; // 圆圈的直径
       const lineHigth = -5;
-      while (true) {// 处理一些简单的数学公式
-        if (word.indexOf('$') >= 0) {
-          tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(word.substring(0, word.indexOf('$')));
-          word = word.substring(word.indexOf('$') + 1, word.length);
-          let math;
-          if (word.charAt(0) === '$') {// 对 "$$" 做处理
-            word = word.substring(1, word.length);
-            math = word.substring(0, word.indexOf('$'));
-            word = word.substring(word.indexOf('$') + 2, word.length);
-          } else {
-            math = word.substring(0, word.indexOf('$'));
-            word = word.substring(word.indexOf('$') + 1, word.length);
-          }
-          let sub = false;
-          for (const char of math) {
-            if (char === '_') {
-              sub = true;
-            } else {
-              if (sub) {
-                g.append('text').attr('x', paddingLeft + text.node().getBBox().width).attr('fill', 'black')
-                  .attr('y', -lineHigth).attr('transform', 'scale(0.7) translate(24,10)').text(char);
-              } else {
-                text.append('tspan').attr('x', paddingLeft + tspan.node().getBBox().width).attr('y', -lineHigth).text(char);
-              }
-              sub = false;
-            }
-          }
-        } else {
-          tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(word);
-          break;
-        }
+
+      if (word.indexOf('$') >= 0) {
+        vm.dealMathSvg(word, text, paddingLeft, g, '$$');
+      } else {
+        tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(word);
       }
-      // tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(word);
-      const bbox = g.node().getBBox();
       const padding = 4;
+      const bbox = g.node().getBBox();
+
       const rect = g.append('rect')
         .attr('x', bbox.x + padding)
         .attr('y', bbox.y - padding)
@@ -385,7 +360,37 @@ export class AppComponent implements AfterViewInit, OnInit {
       }
     });
   }
-
+  dealMathSvg(words: string, text: any, paddingLeft: number, g: any, splitChar: string): void {
+    const maths = words.split(splitChar);
+    const mathsLength = maths.length;
+    for (let i = 0; i < mathsLength; i++) {
+      const height =  text.node().getBBox().height;
+      const math = maths[i];
+      if (i % 2 !== 0) {
+        let sub = false;
+        for (const char of math) {// 开始处理
+          if (char === '_') {
+            sub = true;
+          } else {
+            if (sub) {
+              g.append('text').attr('x', (g.node().getBBox().width + paddingLeft) * 1.3).attr('fill', 'black')
+                .attr('y',  height / 2)
+                .attr('transform', 'scale(0.7) translate(' + 0 + ',' + height + ')').text(char);
+            } else {
+              text.append('tspan').attr('x', text.node().getBBox().width + paddingLeft).attr('y', height / 2).text(char);
+            }
+            sub = false;
+          }
+        }
+      } else {
+        if (splitChar === '$$') {
+          this.dealMathSvg(math, text, paddingLeft, g, '$');
+        } else {
+          text.append('tspan').attr('x', paddingLeft).attr('y',  height / 2).text(math);
+        }
+      }
+    }
+  }
   openDialog(content: string): void {
     const dialogRef = this.dialog.open(DialogDetailsComponent, {
       // width: '250px',
