@@ -338,7 +338,7 @@ export class AppComponent implements AfterViewInit, OnInit {
           tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(word.substring(0, word.indexOf('$')));
           word = word.substring(word.indexOf('$') + 1, word.length);
           let math;
-          if (word.charAt(0) === '$') {
+          if (word.charAt(0) === '$') {// 对 "$$" 做处理
             word = word.substring(1, word.length);
             math = word.substring(0, word.indexOf('$'));
             word = word.substring(word.indexOf('$') + 2, word.length);
