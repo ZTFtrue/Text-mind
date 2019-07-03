@@ -327,17 +327,51 @@ export class AppComponent implements AfterViewInit, OnInit {
     // tslint:disable-next-line: space-before-function-paren
     texts.each(function () {
       const text = d3.select(this);
+      const g = text.select(function () { return this.parentNode; });
+
       const words = text.text().split('\n');
+      let word = words[0];
       let tspan = text.text(null);
       const paddingLeft = 8; // 圆圈的直径
       const lineHigth = -5;
-      tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(words[0]);
-      const bbox = text.node().getBBox();
+      while (true) {// 处理一些简单的数学公式
+        if (word.indexOf('$') >= 0) {
+          tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(word.substring(0, word.indexOf('$')));
+          word = word.substring(word.indexOf('$') + 1, word.length);
+          let math;
+          if (word.charAt(0) === '$') {
+            word = word.substring(1, word.length);
+            math = word.substring(0, word.indexOf('$'));
+            word = word.substring(word.indexOf('$') + 2, word.length);
+          } else {
+            math = word.substring(0, word.indexOf('$'));
+            word = word.substring(word.indexOf('$') + 1, word.length)
+          }
+          let sub = false;
+          for (const char of math) {
+            if (char === '_') {
+              sub = true;
+            } else {
+              if (sub) {
+                g.append('text').attr('x', paddingLeft + text.node().getBBox().width).attr('fill', 'black')
+                  .attr('y', -lineHigth).attr('transform', 'scale(0.7) translate(24,10)').text(char);
+              } else {
+                text.append('tspan').attr('x', paddingLeft + tspan.node().getBBox().width).attr('y', -lineHigth).text(char);
+              }
+              sub = false;
+            }
+          }
+        } else {
+          tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(word);
+          break;
+        }
+      }
+      // tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(word);
+      const bbox = g.node().getBBox();
       const padding = 4;
       // tslint:disable-next-line: space-before-function-paren
-      const g = text.select(function () { return this.parentNode; });
       const rect = g.append('rect')
-        .attr('x', bbox.x - paddingLeft)
+        .attr('x', bbox.x + padding)
         .attr('y', bbox.y - padding)
         .attr('width', bbox.width + (paddingLeft * 2))
         .attr('height', bbox.height + (padding * 2))

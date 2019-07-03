@@ -34,6 +34,10 @@ export class DialogDetailsComponent implements AfterViewInit {
       ['Typeset', this.mathJaxObject.Hub, 'mathContent'], () => {
         this.detector.run(() => { this.renderFinish = true; });
       });
+    // this.mathJaxObject.Hub.Queue(['setRenderer', this.mathJaxObject.Hub, 'SVG'],
+    // ['Typeset', this.mathJaxObject.Hub, 'mathContent'], () => {
+    //       this.detector.run(() => { this.renderFinish = true; });
+    //     });
   }
   loadMathConfig() {
     this.mathJaxObject.Hub.Config({
