@@ -12,7 +12,7 @@ declare var MathJax: any;
   templateUrl: './show-content.component.html',
   styleUrls: ['./show-content.component.css']
 })
-export class ShowContentComponent implements OnInit {
+export class ShowContentComponent implements OnInit, AfterViewInit {
 
   title = 'gd-app';
   // content: string;
