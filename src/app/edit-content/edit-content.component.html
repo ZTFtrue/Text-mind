@@ -13,6 +13,6 @@
   <mat-form-field [style.fontSize]="fontSize.value">
     <mat-label>Edit</mat-label>
     <textarea  (change)="textareaChange()" [formControl]="textFormControl" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
-      cdkAutosizeMaxRows="10"></textarea>
+      cdkAutosizeMaxRows="{{textLine}}"></textarea>
   </mat-form-field>
 </div>
