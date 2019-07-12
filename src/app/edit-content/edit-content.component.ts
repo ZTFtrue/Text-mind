@@ -20,16 +20,13 @@ export class EditContentComponent implements OnInit, AfterViewInit {
     this.communication.previewToEditObserve.subscribe((res: string) => {
       this.textFormControl.setValue(res);
     });
-   
+    // TODO 默认是16
+    this.textLine = Math.floor((document.documentElement.clientHeight - 300) / 16);
   }
   ngAfterViewInit() {
     window.onresize = ((event) => {
-      this.textLine = (screen.availHeight - 340) / parseInt(this.fontSize.value.replace('px', ''));
-      console.log(this.textLine);
+      this.textLine = Math.floor((document.documentElement.clientHeight - 300) / parseInt(this.fontSize.value.replace('px', '')));
     });
-    const a = this.fontSize.value.replace('px', '');
-    this.textLine = Math.floor((screen.availHeight - 340) / parseInt(a));
-    console.log(Math.floor(this.textLine));
   }
   submitContent(values: any) {
     console.log(values);
