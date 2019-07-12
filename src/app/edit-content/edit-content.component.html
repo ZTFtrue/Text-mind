@@ -1,4 +1,5 @@
 <div class="write-view" >
+  <span>I didn't check for text content changes, so be careful when saving.</span>
   <mat-form-field>
     <mat-label>Font size</mat-label>
     <mat-select #fontSize value="16px" (selectionChange)="triggerResize()">
@@ -15,4 +16,5 @@
     <textarea appWindowEvent (windowOnResize)="onWindowsResize($event)" (change)="textareaChange()" [formControl]="textFormControl" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
       cdkAutosizeMaxRows="{{textLine}}"></textarea>
   </mat-form-field>
+  <button mat-button color="primary" (click)="saveContent()">Save</button>
 </div>

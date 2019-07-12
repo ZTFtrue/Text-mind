@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { CommunicationService } from '../communication.service';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
+import * as fs from 'fs';
 
 @Component({
   selector: 'app-edit-content',
@@ -37,5 +38,18 @@ export class EditContentComponent implements OnInit {
   }
   textareaChange() {
     this.communication.setContentToPreview(this.textFormControl.value);
+  }
+  saveContent() {
+    const filePath = JSON.parse(localStorage.getItem('path'));
+    if (!filePath) {
+      return console.log('no file');
+    }
+    fs.writeFile(filePath, this.textFormControl.value
+      , (err) => {
+        if (!err) {
+          console.log('写入成功！');
+        }
+      });
+
   }
 }
