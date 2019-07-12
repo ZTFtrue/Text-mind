@@ -9,7 +9,7 @@ import { take } from 'rxjs/operators';
   templateUrl: './edit-content.component.html',
   styleUrls: ['./edit-content.component.css']
 })
-export class EditContentComponent implements OnInit, AfterViewInit {
+export class EditContentComponent implements OnInit {
   @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
   @ViewChild('fontSize', { static: false }) fontSize: any;
   textLine = 10;
@@ -23,11 +23,10 @@ export class EditContentComponent implements OnInit, AfterViewInit {
     // TODO 默认是16
     this.textLine = Math.floor((document.documentElement.clientHeight - 300) / 16);
   }
-  ngAfterViewInit() {
-    window.onresize = ((event) => {
-      this.textLine = Math.floor((document.documentElement.clientHeight - 300) / parseInt(this.fontSize.value.replace('px', '')));
-    });
+  onWindowsResize(event) {
+    this.textLine = Math.floor((event.target.innerHeight - 300) / parseInt(this.fontSize.value.replace('px', ''), 10));
   }
+
   submitContent(values: any) {
     console.log(values);
   }

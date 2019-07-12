@@ -1,5 +1,5 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div class="input-form">
+<div class="input-form" appWindowEvent (windowOnResize)="onWindowsResize($event)">
     放大速率：<input class="parameter-input" type="number" placeholder="放大速率" [(ngModel)]="scaleSpeed">
     平移速率：<input class="parameter-input" type="number" placeholder="平移速率" [(ngModel)]="moveSpeed" />
     允许复制：<input type="checkbox" [(ngModel)]="forbidCopy" />

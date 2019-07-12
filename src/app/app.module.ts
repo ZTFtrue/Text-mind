@@ -13,6 +13,7 @@ import { DialogDetailsComponent } from './dialog/dialog.component';
 import { MouseWheelDirective } from './mouse-wheel.directive';
 import { EditContentComponent } from './edit-content/edit-content.component';
 import { ShowContentComponent } from './show-content/show-content.component';
+import { WindowEventDirective } from './window-event.directive';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ShowContentComponent } from './show-content/show-content.component';
     DialogDetailsComponent,
     MouseWheelDirective,
     EditContentComponent,
-    ShowContentComponent
+    ShowContentComponent,
+    WindowEventDirective
   ],
   imports: [
     BrowserModule,

@@ -76,6 +76,7 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
   read() {
     // 本地文件写入
     const filePath = JSON.parse(localStorage.getItem('path'));
@@ -101,12 +102,12 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     this.read();
-    window.onresize = ((event) => {
-      if (this.svg && !this.useBrowser) {
-        this.svg.attr('width', this.svgContent.nativeElement.offsetWidth);
-        this.svg.attr('height', this.svgContent.nativeElement.offsetHeight);
-      }
-    });
+  }
+  onWindowsResize(event) {
+    if (this.svg && !this.useBrowser) {
+      this.svg.attr('width', this.svgContent.nativeElement.offsetWidth);
+      this.svg.attr('height', this.svgContent.nativeElement.offsetHeight);
+    }
   }
   uploadFileClick() {
     this.inputfile.nativeElement.click();

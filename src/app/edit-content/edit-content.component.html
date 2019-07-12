@@ -1,4 +1,4 @@
-<div class="write-view">
+<div class="write-view" >
   <mat-form-field>
     <mat-label>Font size</mat-label>
     <mat-select #fontSize value="16px" (selectionChange)="triggerResize()">
@@ -12,7 +12,7 @@
   </mat-form-field>
   <mat-form-field [style.fontSize]="fontSize.value">
     <mat-label>Edit</mat-label>
-    <textarea  (change)="textareaChange()" [formControl]="textFormControl" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+    <textarea appWindowEvent (windowOnResize)="onWindowsResize($event)" (change)="textareaChange()" [formControl]="textFormControl" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
       cdkAutosizeMaxRows="{{textLine}}"></textarea>
   </mat-form-field>
 </div>
