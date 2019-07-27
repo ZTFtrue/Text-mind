@@ -367,6 +367,14 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
           vm.openDialog(event.data.name);
         });
         rect.style('stroke', vm.svgConfig.lineColor + '66');
+        console.log(bbox);
+        g.append('line')
+          .attr('x1', bbox.x + (padding))
+          .attr('y1', bbox.height - (padding * 1.5))
+          .attr('x2', bbox.width + (paddingLeft * 2))
+          .attr('y2', bbox.height - (padding * 1.5))
+          .style('stroke', vm.svgConfig.lineColor)
+          .style('stroke-width', 2);
       } else {
         rect.style('stroke', vm.svgConfig.lineColor);
       }
