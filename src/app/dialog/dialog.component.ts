@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, NgZone, SecurityContext } from '@angular/core';
+import { AfterViewInit, Component, Inject, NgZone, SecurityContext, ElementRef, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfigService } from '../config.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -12,8 +12,9 @@ import highlight from 'highlight.js';
 export class DialogDetailsComponent implements AfterViewInit {
   dataContent;
   mathJaxObject;
-  renderFinish = false;
   dialogTitle: string;
+  @ViewChild('mathContent', { static: true }) mathContent: ElementRef;
+
   constructor(public dialogRef: MatDialogRef<DialogDetailsComponent>,
     // tslint:disable-next-line: align
     @Inject(MAT_DIALOG_DATA) public data: string, public cs: ConfigService, public detector: NgZone, private sanitizer: DomSanitizer) {
@@ -31,8 +32,8 @@ export class DialogDetailsComponent implements AfterViewInit {
 
   renderMath() {
     this.mathJaxObject.Hub.Queue(['setRenderer', this.mathJaxObject.Hub, 'CommonHTML'],
-      ['Typeset', this.mathJaxObject.Hub, 'mathContent'], () => {
-        this.detector.run(() => { this.renderFinish = true; });
+      ['Typeset', this.mathJaxObject.Hub, this.mathContent.nativeElement], () => {
+        this.detector.run(() => { });
       });
     // this.mathJaxObject.Hub.Queue(['setRenderer', this.mathJaxObject.Hub, 'SVG'],
     // ['Typeset', this.mathJaxObject.Hub, 'mathContent'], () => {
