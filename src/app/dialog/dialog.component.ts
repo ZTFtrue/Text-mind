@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, NgZone, SecurityContext, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, NgZone, SecurityContext, ElementRef, ViewChild, Renderer2, Renderer } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfigService } from '../config.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -17,7 +17,8 @@ export class DialogDetailsComponent implements AfterViewInit {
 
   constructor(public dialogRef: MatDialogRef<DialogDetailsComponent>,
     // tslint:disable-next-line: align
-    @Inject(MAT_DIALOG_DATA) public data: string, public cs: ConfigService, public detector: NgZone, private sanitizer: DomSanitizer) {
+    @Inject(MAT_DIALOG_DATA) public data: string, public cs: ConfigService, public detector: NgZone,
+    private sanitizer: DomSanitizer, private renderer2: Renderer2) {
     const datatArrary = data.split('\n');
     datatArrary.reverse();
     this.dialogTitle = datatArrary.pop();
@@ -26,68 +27,22 @@ export class DialogDetailsComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.mathJaxObject = this.cs.nativeGlobal().MathJax;
-    this.loadMathConfig();
+    this.renderer2.setProperty(this.mathContent.nativeElement, 'innerHTML', this.dataContent);
     this.renderMath();
   }
 
   renderMath() {
     this.mathJaxObject.Hub.Queue(['setRenderer', this.mathJaxObject.Hub, 'CommonHTML'],
       ['Typeset', this.mathJaxObject.Hub, this.mathContent.nativeElement], () => {
-        this.detector.run(() => { });
+        this.detector.run(() => {
+        });
       });
     // this.mathJaxObject.Hub.Queue(['setRenderer', this.mathJaxObject.Hub, 'SVG'],
     // ['Typeset', this.mathJaxObject.Hub, 'mathContent'], () => {
     //       this.detector.run(() => { this.renderFinish = true; });
     //     });
   }
-  loadMathConfig() {
-    this.mathJaxObject.Hub.Config({
-      showMathMenu: false,
-      tex2jax: {
-        inlineMath: [
-          ['$', '$']
-        ],
-        displayMath: [
-          ['$$', '$$']
-        ]
-      },
-      CommonHTML: {
-        linebreaks: {
-          automatic: true
-        }
-      },
-      'HTML-CSS': {
-        linebreaks: {
-          automatic: true
-        }
-      },
-      SVG: {
-        linebreaks: {
-          automatic: true
-        },
-        mtextFontInherit: true,
-        blacker: 1,
-      },
-      // extensions: ['tex2jax.js', 'TeX/AMSmath.js'],
-      // jax: ['input/TeX', 'output/SVG'],
-      jax: ['input/MathML', 'output/SVG'],
-      extensions: ['mml2jax.js', 'MathEvents.js'],
-      MathML: {
-        extensions: ['content-mathml.js']
-      },
-      menuSettings: {
-        zoom: 'None'
-      },
-      MatchWebFonts: {
-        matchFor: {
-          SVG: true
-        },
-        fontCheckDelay: 500,
-        fontCheckTimeout: 15 * 1000
-      },
-      messageStyle: 'none'
-    });
-  }
+
   closeDialog() {
     this.detector.run(() => { this.dialogRef.close(); });
   }

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ViewChild, AfterViewInit, ElementRef, Renderer2, OnInit, Input } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ElementRef, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as d3 from 'd3';
 import { DialogDetailsComponent } from '../dialog/dialog.component';
@@ -34,7 +34,7 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
   @ViewChild('inputfile', { static: true }) inputfile: ElementRef;
   @ViewChild('svgContent', { static: true }) svgContent: ElementRef;
   editContent: string;
-  constructor(public dialog: MatDialog, private renderer: Renderer2, private el: ElementRef, private communication: CommunicationService) {
+  constructor(public dialog: MatDialog, private communication: CommunicationService) {
     // svgWidth: number, svgHeight: number, tabIndex: number, lineColor: string, textColor: string
     this.svgConfig = new SvgConfig(1000, 1000, 2, '#0781FF', 'black');
   }
