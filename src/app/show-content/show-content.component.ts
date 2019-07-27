@@ -6,7 +6,6 @@ import { app } from 'electron';
 import * as fs from 'fs';
 import { SvgConfig } from '../svg-config';
 import { CommunicationService } from '../communication.service';
-declare var MathJax: any;
 @Component({
   selector: 'app-show-content',
   templateUrl: './show-content.component.html',
@@ -367,7 +366,6 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
           vm.openDialog(event.data.name);
         });
         rect.style('stroke', vm.svgConfig.lineColor + '66');
-        console.log(bbox);
         g.append('line')
           .attr('x1', bbox.x + (padding))
           .attr('y1', bbox.height - (padding * 1.5))
