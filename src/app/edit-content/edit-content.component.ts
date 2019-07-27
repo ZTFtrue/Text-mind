@@ -17,7 +17,6 @@ export class EditContentComponent implements OnInit {
   constructor(private fb: FormBuilder, private communication: CommunicationService, private ngZone: NgZone) { }
   textFormControl = new FormControl('', []);
   ngOnInit() {
-    console.log(this.textFormControl);
     this.communication.previewToEditObserve.subscribe((res: string) => {
       this.textFormControl.setValue(res);
     });
@@ -29,7 +28,6 @@ export class EditContentComponent implements OnInit {
   }
 
   submitContent(values: any) {
-    console.log(values);
   }
   triggerResize() {
     // Wait for changes to be applied, then trigger textarea resize.
