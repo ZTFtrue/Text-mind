@@ -28,11 +28,10 @@ export class DialogDetailsComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     let code;
     let startOrEnd = 1;
-    for (let s of this.dataContent) {
+    for (const s of this.dataContent) {
       if (s.indexOf('$') >= 0) {
         const p = this.renderer2.createElement('p');
         this.renderer2.setProperty(p, 'innerHTML', s);
-        console.dir(p);
         this.renderer2.appendChild(this.mathContent.nativeElement, p);
       } else {
         if (s.indexOf('```') >= 0) {
@@ -45,8 +44,6 @@ export class DialogDetailsComponent implements AfterViewInit, OnInit {
             const p = this.renderer2.createElement('p');
             this.renderer2.setProperty(p, 'innerHTML', this.renderMd(code));
             this.renderer2.appendChild(this.mathContent.nativeElement, p);
-            console.log('startOrEnd   ' + startOrEnd);
-            console.dir(p);
             continue;
           }
         }
