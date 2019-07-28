@@ -23,10 +23,43 @@ export class DialogDetailsComponent implements AfterViewInit, OnInit {
     const datatArrary = data.split('\n');
     datatArrary.reverse();
     this.dialogTitle = datatArrary.pop();
-    this.dataContent = this.renderMd(datatArrary.reverse().join('\n\n'));
+    this.dataContent = datatArrary.reverse();
   }
   ngOnInit(): void {
-    this.renderer2.setProperty(this.mathContent.nativeElement, 'innerHTML', this.dataContent);
+    let code;
+    let startOrEnd = 1;
+    for (let s of this.dataContent) {
+      if (s.indexOf('$') >= 0) {
+        const p = this.renderer2.createElement('p');
+        this.renderer2.setProperty(p, 'innerHTML', s);
+        console.dir(p);
+        this.renderer2.appendChild(this.mathContent.nativeElement, p);
+      } else {
+        if (s.indexOf('```') >= 0) {
+          if (startOrEnd === 1) {
+            startOrEnd = 0;
+            code = '';
+          } else if (startOrEnd === 0) {
+            startOrEnd = 1; // 结束
+            code = code + '\n' + s;
+            const p = this.renderer2.createElement('p');
+            this.renderer2.setProperty(p, 'innerHTML', this.renderMd(code));
+            this.renderer2.appendChild(this.mathContent.nativeElement, p);
+            console.log('startOrEnd   ' + startOrEnd);
+            console.dir(p);
+            continue;
+          }
+        }
+        if (startOrEnd === 0) {
+          code = code + '\n' + s;
+        } else {
+          const p = this.renderer2.createElement('p');
+          this.renderer2.setProperty(p, 'innerHTML', this.renderMd(s));
+          this.renderer2.appendChild(this.mathContent.nativeElement, p);
+        }
+      }
+    }
+    // this.renderer2.setProperty(this.mathContent.nativeElement, 'innerHTML', this.dataContent);
   }
   ngAfterViewInit() {
     this.mathJaxObject = this.cs.nativeGlobal().MathJax;
