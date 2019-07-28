@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { CommunicationService } from '../communication.service';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
@@ -14,7 +14,7 @@ export class EditContentComponent implements OnInit {
   @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
   @ViewChild('fontSize', { static: false }) fontSize: any;
   textLine = 10;
-  constructor(private fb: FormBuilder, private communication: CommunicationService, private ngZone: NgZone) { }
+  constructor(private communication: CommunicationService, private ngZone: NgZone) { }
   textFormControl = new FormControl('', []);
   ngOnInit() {
     this.communication.previewToEditObserve.subscribe((res: string) => {

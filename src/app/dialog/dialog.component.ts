@@ -35,7 +35,6 @@ export class DialogDetailsComponent implements AfterViewInit, OnInit {
   }
 
   renderMath() {
-    console.dir(this.mathJaxObject);
     this.mathJaxObject.Hub.Queue(['setRenderer', this.mathJaxObject.Hub, 'CommonHTML'],
       ['Typeset', this.mathJaxObject.Hub, this.mathContent.nativeElement], () => {
         this.detector.run(() => {
