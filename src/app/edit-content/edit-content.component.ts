@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ViewChild, NgZone, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { CommunicationService } from '../communication.service';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';

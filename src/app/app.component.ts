@@ -15,7 +15,7 @@ export class AppComponent {
   lastSelect = 0;
   mathJaxObject;
 
-  constructor(private communication: CommunicationService, public cs: ConfigService) {
+  constructor(private communication: CommunicationService) {
 
   }
 
