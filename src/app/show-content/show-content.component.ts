@@ -13,7 +13,6 @@ import { CommunicationService } from '../communication.service';
 })
 export class ShowContentComponent implements OnInit, AfterViewInit {
 
-  title = 'gd-app';
   // content: string;
   inputContent = '';
   jsonTree = { name: '', children: [] };

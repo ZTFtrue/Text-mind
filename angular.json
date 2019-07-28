@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "gd-app": {
+    "text-mind": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -62,18 +62,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "gd-app:build"
+            "browserTarget": "text-mind:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "gd-app:build:production"
+              "browserTarget": "text-mind:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "gd-app:build"
+            "browserTarget": "text-mind:build"
           }
         },
         "test": {
@@ -107,7 +107,7 @@
         }
       }
     },
-    "gd-app-e2e": {
+    "text-mind-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -116,11 +116,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "gd-app:serve"
+            "devServerTarget": "text-mind:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "gd-app:serve:production"
+              "devServerTarget": "text-mind:serve:production"
             }
           }
         },
@@ -136,5 +136,5 @@
       }
     }
   },
-  "defaultProject": "gd-app"
+  "defaultProject": "text-mind"
 }

@@ -1,5 +1,5 @@
 {
-  "productName": "gd-app-electron",
+  "productName": "text-mind-electron",
   "directories": {
     "output": "release/"
   },
@@ -20,19 +20,19 @@
         "!tslint.json"
     ],
   "win": {
-    "icon": "gd-app/dist",
+    "icon": "text-mind/dist",
     "target": [
       "portable"
     ]
   },
   "mac": {
-    "icon": "gd-app/dist",
+    "icon": "text-mind/dist",
     "target": [
       "dmg"
     ]
   },
   "linux": {
-    "icon": "gd-app/dist",
+    "icon": "text-mind/dist",
     "target": [
       "AppImage"
     ]
