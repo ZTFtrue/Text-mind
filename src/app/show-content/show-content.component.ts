@@ -317,7 +317,7 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
       .text((d) => {
         return d.data.name;
       });
-    this.wrapWord(gs.selectAll('text'));
+    this.dealWord(gs.selectAll('text'));
     this.svg.attr('viewBox', '0 0 ' + this.viewBoxEndX + ' ' + this.viewBoxEndY);
     this.svg.attr('fill', 'white');
   }
@@ -333,7 +333,7 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
     this.svg.attr('height', this.svgContent.nativeElement.offsetHeight);
     this.svg.attr('viewBox', '0 0 ' + this.viewBoxEndX + ' ' + this.viewBoxEndY);
   }
-  wrapWord(texts: any) {
+  dealWord(texts: any) {
     const vm = this;
     // tslint:disable-next-line: space-before-function-paren
     texts.each(function () {
@@ -344,22 +344,17 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
       const word = words[0];
       const paddingLeft = 8; // 圆圈的直径
       // text.text(null);
-      if (word.indexOf('$') >= 0) {
-        vm.dealMathSvg(word, text, paddingLeft, g, '$$');
-      }
       text.text(word);
-
       const padding = 4;
       const bbox = g.node().getBBox();
 
       const rect = g.append('rect')
         .attr('x', bbox.x + padding)
         .attr('y', bbox.y - padding)
-        .attr('width', bbox.width + (paddingLeft * 2))
+        .attr('width', bbox.width + padding)
         .attr('height', bbox.height + (padding * 2))
         .style('fill', 'white').lower();
       if (words.length > 1) {
-        console.log(1);
         g.attr('class', 'text-node');
         g.on('click', (event) => {
           vm.openDialog(event.data.name);
@@ -377,37 +372,7 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  dealMathSvg(words: string, text: any, paddingLeft: number, g: any, splitChar: string): void {
-    const maths = words.split(splitChar);
-    const mathsLength = maths.length;
-    for (let i = 0; i < mathsLength; i++) {
-      const height = text.node().getBBox().height;
-      const math = maths[i];
-      if (i % 2 !== 0) {
-        let sub = false;
-        for (const char of math) {// 开始处理
-          if (char === '_') {
-            sub = true;
-          } else {
-            if (sub) {
-              g.append('text').attr('x', (g.node().getBBox().width + paddingLeft) * 1.3).attr('fill', 'black')
-                .attr('y', height / 2)
-                .attr('transform', 'scale(0.7) translate(' + 0 + ',' + height + ')').text(char);
-            } else {
-              text.append('tspan').attr('x', text.node().getBBox().width + paddingLeft).attr('y', height / 2).text(char);
-            }
-            sub = false;
-          }
-        }
-      } else {
-        if (splitChar === '$$') {
-          this.dealMathSvg(math, text, paddingLeft, g, '$');
-        } else {
-          text.append('tspan').attr('x', paddingLeft).attr('y', height / 2).text(math);
-        }
-      }
-    }
-  }
+
   openDialog(content: string): void {
     const dialogRef = this.dialog.open(DialogDetailsComponent, {
       // width: '250px',
