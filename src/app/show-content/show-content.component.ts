@@ -311,7 +311,7 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
         return d.data.name;
       });
     this.dealWord(gs.selectAll('text'));
-    background.attr('width', this.maxWidth)
+    background.attr('width', this.maxWidth);
     this.svg.attr('viewBox', '0 0 ' + this.maxWidth + ' ' + this.viewBoxEndY);
     this.svg.attr('fill', 'white');
     if (this.useBrowser) {
