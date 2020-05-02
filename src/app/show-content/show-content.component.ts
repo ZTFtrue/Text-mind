@@ -308,11 +308,12 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
     // 文字
     gs.append('text')
       .attr('x', (d) => {
-        return d.children ? -40 : 8;
+        return d.children ? 10 : 10;
       })
       .attr('y', -5)
       .attr('dy', 10)
       .attr('fill', 'black')
+      .attr('font-size', '16px')
       .text((d) => {
         return d.data.name;
       });
@@ -341,15 +342,13 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
       const g = text.select(function () { return this.parentNode; });
       const words = text.text().split('\n');
       const word = words[0];
-      let tspan = text.text(null);
       const paddingLeft = 8; // 圆圈的直径
-      const lineHigth = -5;
-
+      // text.text(null);
       if (word.indexOf('$') >= 0) {
         vm.dealMathSvg(word, text, paddingLeft, g, '$$');
-      } else {
-        tspan = text.append('tspan').attr('x', paddingLeft).attr('y', lineHigth).text(word);
       }
+      text.text(word);
+
       const padding = 4;
       const bbox = g.node().getBBox();
 
@@ -360,6 +359,7 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
         .attr('height', bbox.height + (padding * 2))
         .style('fill', 'white').lower();
       if (words.length > 1) {
+        console.log(1);
         g.attr('class', 'text-node');
         g.on('click', (event) => {
           vm.openDialog(event.data.name);
