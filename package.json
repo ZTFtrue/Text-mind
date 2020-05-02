@@ -1,6 +1,6 @@
 {
   "name": "text-mind",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "dist/main.js",
   "scripts": {
     "postinstall": "npm run postinstall:electron && electron-builder install-app-deps",
