@@ -28,7 +28,7 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
   lastClientY = -1;
   forbidCopy = false;
   useBrowser = false;
-
+  maxWidth = 0;
   svgConfig: SvgConfig;
   @ViewChild('inputfile', { static: true }) inputfile: ElementRef;
   @ViewChild('svgContent', { static: true }) svgContent: ElementRef;
@@ -227,20 +227,13 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
       this.svg = content.append('svg');
     }
     // 添加背景
-    this.svg.append('rect')
+    const background = this.svg.append('rect')
       .attr('x', 0)
       .attr('y', 0)
-      .attr('width', this.svgConfig.svgWidth)
       .attr('height', this.svgConfig.svgHeight)
       .attr('fill', 'white');
     this.svg.attr('fill', 'white');
-    if (this.useBrowser) {
-      this.svg.attr('width', this.svgConfig.svgWidth);
-      this.svg.attr('height', this.svgConfig.svgHeight);
-    } else {
-      this.svg.attr('width', this.svgContent.nativeElement.offsetWidth);
-      this.svg.attr('height', this.svgContent.nativeElement.offsetHeight);
-    }
+
     const g = this.svg.append('g')
       .attr('transform', 'translate(' + marge.top + ',' + marge.left + ')');
     // 创建一个hierarchy layout
@@ -318,8 +311,16 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
         return d.data.name;
       });
     this.dealWord(gs.selectAll('text'));
-    this.svg.attr('viewBox', '0 0 ' + this.viewBoxEndX + ' ' + this.viewBoxEndY);
+    background.attr('width', this.maxWidth)
+    this.svg.attr('viewBox', '0 0 ' + this.maxWidth + ' ' + this.viewBoxEndY);
     this.svg.attr('fill', 'white');
+    if (this.useBrowser) {
+      this.svg.attr('width', this.maxWidth);
+      this.svg.attr('height', this.svgConfig.svgHeight);
+    } else {
+      this.svg.attr('width', this.svgContent.nativeElement.offsetWidth);
+      this.svg.attr('height', this.svgContent.nativeElement.offsetHeight);
+    }
   }
   resetSvg() {
     if (this.useBrowser) {
@@ -342,18 +343,18 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
       const g = text.select(function () { return this.parentNode; });
       const words = text.text().split('\n');
       const word = words[0];
-      const paddingLeft = 8; // 圆圈的直径
       // text.text(null);
       text.text(word);
       const padding = 4;
       const bbox = g.node().getBBox();
-
+      vm.maxWidth = Math.max(this.getBoundingClientRect().x + bbox.width + padding, vm.maxWidth);
       const rect = g.append('rect')
         .attr('x', bbox.x + padding)
         .attr('y', bbox.y - padding)
         .attr('width', bbox.width + padding)
         .attr('height', bbox.height + (padding * 2))
         .style('fill', 'white').lower();
+
       if (words.length > 1) {
         g.attr('class', 'text-node');
         g.on('click', (event) => {
@@ -435,7 +436,15 @@ export class ShowContentComponent implements OnInit, AfterViewInit {
     this.lastClientY = -1;
   }
   saveSvg(): void {
-    this.resetSvg();
+    if (!this.useBrowser) {
+      // this.viewBoxEndX = this.maxWidth;
+      // this.viewBoxEndY = this.viewBoxEndY;
+      // this.lastClientX = -1;
+      // this.lastClientY = -1;
+      this.svg.attr('width', this.maxWidth);
+      this.svg.attr('height', this.svgConfig.svgHeight);
+      this.svg.attr('viewBox', '0 0 ' + this.maxWidth + ' ' + this.svgConfig.svgHeight);
+    }
     const html = d3.select('svg')
       .attr('title', 'math')
       .attr('version', 1.1)
